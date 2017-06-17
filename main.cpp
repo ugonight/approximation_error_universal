@@ -115,6 +115,8 @@ double approximation_error2(double x[], double y[], double a, double b, double c
 	return 1 - numerator / denominator;
 }
 
+//追加課題
+
 //（万能？）近似誤差
 Formula f;
 double approximation_error_universal(double x[], double y[], int n, char* formula) {
@@ -172,7 +174,7 @@ int main(int argc,char *argv[]) {
 	polynomial_approximation(x, y, &a, &b, &c, num);
 	printf("y = %lf x2 + %lf x + %lf\n", a, b, c);
 	char str[256];
-	sprintf_s(str, 256, "%lf * x ^ 2 + %lf * x + %lf", a, b, c);
+	sprintf_s(str, 256, "%lf * x ^ 2 + %lf * x + %lf", a, b, c);	//パラメーターを数値に変換して式を作る
 	printf("R2 = %lf\n", approximation_error_universal(x, y, num, str));
 	
 	free(x);

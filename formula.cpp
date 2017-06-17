@@ -14,7 +14,7 @@ Formula::Formula() {
 void Formula::shorten() {
 	int i, j;
 	for (i = 0; i < MAX; i++) {
-		while (list[i][0] == '0') {
+		while (list[i][0] == 'n') {	//n:詰める要素
 			for (j = i; list[j][0] != '\0'; j++) {
 				strcpy_s(list[j], MAX, list[j + 1]);
 			}
@@ -31,7 +31,7 @@ void  Formula::calculation_list(int s, int e) {
 		while (list[i][0] == '(') {
 			for (j = i; j < e; j++) {
 				if (list[j][0] == ')') {
-					list[j][0] = '0'; list[i][0] = '0';
+					list[j][0] = 'n'; list[i][0] = 'n';
 					calculation_list(i+1 , j-1);
 					shorten();
 				}
@@ -43,12 +43,12 @@ void  Formula::calculation_list(int s, int e) {
 	for (i = s; i < e; i++) {
 		while (list[i][0] == 'l') {	//対数
 			sprintf_s(list[i], MAX, "%lf", log(atof(list[i + 1])));
-			list[i + 1][0] = '0';
+			list[i + 1][0] = 'n';
 			shorten();
 		}
 		while (list[i][0] == 'e') {//指数関数
 			sprintf_s(list[i], MAX, "%lf", exp(atof(list[i + 1])));
-			list[i + 1][0] = '0';
+			list[i + 1][0] = 'n';
 			shorten();
 		}
 	}
@@ -57,12 +57,12 @@ void  Formula::calculation_list(int s, int e) {
 	for (i = s; i < e; i++) {
 		while (list[i][0] == '^') {
 			sprintf_s(list[i - 1], MAX, "%lf", pow(atof(list[i - 1]), atof(list[i + 1])));
-			list[i][0] = '0'; list[i + 1][0] = '0';
+			list[i][0] = 'n'; list[i + 1][0] = 'n';
 			shorten();
 		}
 		while (list[i][0] == 'r') {
 			sprintf_s(list[i], MAX, "%lf", sqrt(atof(list[i + 1])));
-			list[i + 1][0] = '0';
+			list[i + 1][0] = 'n';
 			shorten();
 		}
 	}
@@ -71,12 +71,12 @@ void  Formula::calculation_list(int s, int e) {
 	for (i = s; i < e; i++) {
 		while (list[i][0] == '*') {
 			sprintf_s(list[i - 1], MAX, "%lf", atof(list[i - 1]) * atof(list[i + 1]));
-			list[i][0] = '0'; list[i + 1][0] = '0';
+			list[i][0] = 'n'; list[i + 1][0] = 'n';
 			shorten();
 		}
 		while (list[i][0] == '/') {
 			sprintf_s(list[i - 1], MAX, "%lf", atof(list[i - 1]) / atof(list[i + 1]));
-			list[i][0] = '0'; list[i + 1][0] = '0';
+			list[i][0] = 'n'; list[i + 1][0] = 'n';
 			shorten();
 		}
 	}
@@ -85,12 +85,12 @@ void  Formula::calculation_list(int s, int e) {
 	for (i = s; i < e; i++) {
 		while (list[i][0] == '+') {
 			sprintf_s(list[i - 1], MAX, "%lf", atof(list[i - 1]) + atof(list[i + 1]));
-			list[i][0] = '0'; list[i + 1][0] = '0';
+			list[i][0] = 'n'; list[i + 1][0] = 'n';
 			shorten();
 		}
-		while (list[i][0] == '-') {
+		while (list[i][0] == '-' && list[i][1] == '\0') {
 			sprintf_s(list[i - 1], MAX, "%lf", atof(list[i - 1]) - atof(list[i + 1]));
-			list[i][0] = '0'; list[i + 1][0] = '0';
+			list[i][0] = 'n'; list[i + 1][0] = 'n';
 			shorten();
 		}
 	}
@@ -104,7 +104,7 @@ double Formula::mathematical_analysis(char* str, double x) {
 	//数式リストに整理
 	for (i = 0; str[i] != '\0'; i++) {
 		//数字（パラメーター）
-		if ((str[i] >= '0' && str[i] <= '9') || str[i] == '.') {
+		if ((str[i] >= '0' && str[i] <= '9') || str[i] == '.' || str[i] == '-') {
 			list[i_list][i_num] = str[i];
 			i_num++;
 		}
